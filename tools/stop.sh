@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
+echo -e "\nDeleting k8s namespace..."
 kubectl delete namespace $NAMESPACE
-kind delete cluster $CLUSTER
+
+echo -e "\nDeleting kind k8s cluster..."
+kind delete cluster --name $CLUSTER
