@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
 
-echo -e "\nCreating cluster..."
-kind create cluster --name $CLUSTER
-echo -e "\nAdding apache/airflow helm chart repo..."
-helm repo add apache-airflow https://airflow.apache.org
-echo -e "\nUpdating helm charts..."
-helm repo update
+match_cluster=$(kind get clusters | grep $CLUSTER$)
+if [[ "$match_cluster" = "$CLUSTER" ]]; then
+    echo -e "\nCluster $CLUSTER already exists..."
+else
+    echo -e "\nCreating cluster..."
+    kind create cluster --name $CLUSTER
+fi
 
-echo -e "\nCreating k8s namespace..."
-kubectl create namespace $NAMESPACE
+match_namespace=$(\
+    kubectl get namespace \
+        --output=custom-columns=:metadata.name \
+    | grep $RELEASE$)
+if [[ "$match_namespace" = "$RELEASE" ]]; then
+    echo -e "\nNamespace $RELEASE already exists..."
+else
+    echo -e "\nCreating namespace..."
+    kubectl create namespace $RELEASE
+fi
+
 echo -e "\nInstalling apache-airflow helm chart..."
-helm install airflow apache-airflow/airflow \
-    --namespace $NAMESPACE
+helm upgrade \
+    --install \
+    --namespace $RELEASE \
+    --repo https://airflow.apache.org \
+    --values=$HOME/settings.yaml \
+    $RELEASE airflow
