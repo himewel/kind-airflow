@@ -12,15 +12,35 @@ This repo presents a set of tools to start with [Apache Airflow helm chart](http
 
 - Check if your environment has docker installed and install it if not;
 - To setup the k8s cluster and Apache Airflow helm chart run the following commands:
+
 ```shell
-make build \
-&& make start \
+# build the docker image to manage the cluster
+make build
+# create a cluster and install the helm chart
+make start \
     CLUSTER=<YOUR CLUSTER NAME> \
     RELEASE=<YOUR K8S NAMESPACE>
 ```
+
 - Check the webserver status by forward the UI from the k8s pod:
+
 ```shell
 make forward-webserver \
     PORT=<PORT TO FORWARD THE WEB UI> \
+    RELEASE=<YOUR K8S NAMESPACE>
+```
+
+- The same can be done with flower:
+
+```shell
+make forward-flower \
+    PORT=<PORT TO FORWARD THE WEB UI> \
+    RELEASE=<YOUR K8S NAMESPACE>
+```
+
+- To delete the cluster and remove the k8s namespace:
+
+```shell
+make stop \
     RELEASE=<YOUR K8S NAMESPACE>
 ```
