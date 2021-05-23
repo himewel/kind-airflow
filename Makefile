@@ -4,7 +4,7 @@ kind-image=docker.pkg.github.com/himewel/kind-airflow
 repository=docker.pkg.github.com/himewel/airflow
 
 export CLUSTER
-export NAMESPACE
+export RELEASE
 export PORT
 export TAG
 
@@ -16,12 +16,13 @@ build:
 start:
 	docker run \
 		--env CLUSTER=$(CLUSTER) \
-		--env NAMESPACE=$(NAMESPACE) \
+		--env RELEASE=$(RELEASE) \
 		--interactive \
 		--network=host \
 		--rm \
 		--tty \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
+		--volume $(PWD)/settings.yaml:/root/settings.yaml \
 		--volume ~/.kube:/root/.kube:rw \
 		--volume ~/.helm:/root/.helm:rw \
 		$(kind-image)
@@ -30,7 +31,6 @@ start:
 stop:
 	docker run \
 		--env CLUSTER=$(CLUSTER) \
-		--env NAMESPACE=$(NAMESPACE) \
 		--interactive \
 		--network=host \
 		--tty \
@@ -45,7 +45,7 @@ forward-webserver:
 	docker run \
 		--detach \
 		--env PORT=$(PORT) \
-		--env NAMESPACE=$(NAMESPACE) \
+		--env RELEASE=$(RELEASE) \
 		--network=host \
 		--rm \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
@@ -58,7 +58,7 @@ forward-flower:
 	docker run \
 		--detach \
 		--env PORT=$(PORT) \
-		--env NAMESPACE=$(NAMESPACE) \
+		--env RELEASE=$(RELEASE) \
 		--network=host \
 		--rm \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
@@ -71,14 +71,13 @@ deploy:
 	docker build --tag $(repository):$(TAG) .;
 	docker run \
 		--env CLUSTER=$(CLUSTER) \
-		--env NAMESPACE=$(NAMESPACE) \
-		--env REPOSITORY=$(repository) \
-		--env TAG=$(TAG) \
+		--env RELEASE=$(RELEASE) \
 		--interactive \
 		--network=host \
 		--tty \
 		--rm \
 		--volume /var/run/docker.sock:/var/run/docker.sock \
+		--volume $(PWD)/settings.yaml:/root/settings.yaml \
 		--volume ~/.kube:/root/.kube:rw \
 		--volume ~/.helm:/root/.helm:rw \
 		$(kind-image) \
