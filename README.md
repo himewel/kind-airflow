@@ -6,6 +6,7 @@
 <img alt="Kubernetes" src="https://img.shields.io/badge/Kubernetes-%23326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white"/>
 </p>
 
+This repo presents a set of tools to start with [Apache Airflow helm chart](https://airflow.apache.org/docs/helm-chart).
 
 ## How to start
 
@@ -15,11 +16,11 @@
 make build \
 && make start \
     CLUSTER=<YOUR CLUSTER NAME> \
-    NAMESPACE=<YOUR K8S NAMESPACE>
+    RELEASE=<YOUR K8S NAMESPACE>
 ```
 - Check the webserver status by forward the UI from the k8s pod:
 ```shell
 make forward-webserver \
     PORT=<PORT TO FORWARD THE WEB UI> \
-    NAMESPACE=<YOUR K8S NAMESPACE>
+    RELEASE=<YOUR K8S NAMESPACE>
 ```
