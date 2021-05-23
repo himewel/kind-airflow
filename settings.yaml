@@ -1,0 +1,11 @@
+config:
+    core:
+        load_examples: "True"
+    webserver:
+        expose_config: "True"
+
+# images:
+#     airflow:
+#         repository: $REPOSITORY
+#         tag: $TAG
+#         pullPolicy: Always
