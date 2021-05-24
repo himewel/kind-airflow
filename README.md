@@ -44,3 +44,13 @@ make forward-flower \
 make stop \
     RELEASE=<YOUR K8S NAMESPACE>
 ```
+
+- To release a new version of the dag files, build the Dockerfile and load it to kind:
+
+```shell
+docker build . --tag <YOUR IMAGE NAME>:<YOUR IMAGE TAG>
+make start \
+    CLUSTER=<YOUR CLUSTER NAME> \
+    DOCKERIMAGE=<YOUR IMAGE NAME>:<YOUR IMAGE TAG>
+    RELEASE=<YOUR K8S NAMESPACE>
+```
