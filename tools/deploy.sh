@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# check if the cluster already exists
 match_cluster=$(kind get clusters | grep $CLUSTER$)
 if [[ "$match_cluster" = "$CLUSTER" ]]; then
     echo -e "\nCluster $CLUSTER already exists..."
@@ -8,6 +9,7 @@ else
     kind create cluster --name $CLUSTER
 fi
 
+# check if the kubectl namespace already exists
 match_namespace=$(\
     kubectl get namespace \
         --output=custom-columns=:metadata.name \
@@ -19,6 +21,17 @@ else
     kubectl create namespace $RELEASE
 fi
 
+# check if a docker image needs to be loaded
+if [ -z "$DOCKERIMAGE" ]; then
+    echo -e "Any docker image to load to kind..."
+else
+    echo -e "Loading image to kind cluster..."
+    kind load docker-image \
+        --name $CLUSTER \
+        $DOCKERIMAGE
+fi
+
+# upgrade helm chart
 echo -e "\nInstalling apache-airflow helm chart..."
 helm upgrade \
     --install \
