@@ -8,6 +8,19 @@
 
 This repo presents a set of tools to start with [Apache Airflow helm chart](https://airflow.apache.org/docs/helm-chart).
 
+## Repo structure
+
+```
+├── dags/               <- airflow python dag files
+├── include/            <- python imports to dag files
+├── plugins/            <- airflow plugins
+├── tools/              <- bash scripts and Dockerfile to manipulate k8s
+├── Dockerfile          <- docker container to release the dag files
+├── packages.txt        <- apt packages to be installed in the docker build
+├── requirements.txt    <- python packages to be installed in the docker build
+└── settings.yaml       <- helm settings of airflow helm chart
+```
+
 ## How to start
 
 - Check if your environment has docker installed and install it if not;
