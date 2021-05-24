@@ -19,4 +19,4 @@ RUN curl -sLO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/
 COPY ./*.sh ./tools/
 
 ENTRYPOINT [ "/bin/sh" ]
-CMD [ "./tools/create-helm.sh" ]
+CMD [ "./tools/deploy.sh" ]
